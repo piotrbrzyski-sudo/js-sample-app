@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Tracker</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <p class="eyebrow">Practical JavaScript testing example</p>
+        <h1>Task Tracker</h1>
+        <p>
+          Manage team tasks through a small Express API and a vanilla JavaScript
+          interface that are both covered by automated tests.
+        </p>
+      </section>
+
+      <section class="card" aria-labelledby="new-task-heading">
+        <h2 id="new-task-heading">Create a task</h2>
+        <form id="task-form">
+          <label>
+            Task title
+            <input id="task-title" name="title" type="text" required />
+          </label>
+
+          <label>
+            Owner
+            <input id="task-owner" name="owner" type="text" />
+          </label>
+
+          <label>
+            Due date
+            <input id="task-due-date" name="dueDate" type="date" />
+          </label>
+
+          <button type="submit">Add task</button>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="task-list-heading">
+        <div class="section-header">
+          <h2 id="task-list-heading">Team tasks</h2>
+          <span id="task-count" aria-live="polite">0 tasks</span>
+        </div>
+        <p id="status-message" role="status">Loading tasks...</p>
+        <ul id="task-list" class="task-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
