@@ -82,6 +82,52 @@ describe("Task UI", () => {
     expect(document.querySelectorAll(".task-card.is-completed")).toHaveLength(1);
   });
 
+  it("shows an empty state when the API returns no tasks", async () => {
+    const { app } = mountTaskApp();
+
+    await app.loadTasks();
+
+    expect(document.querySelector("#task-count").textContent).toBe("0 tasks");
+    expect(document.querySelector("#task-list").children).toHaveLength(0);
+    expect(document.querySelector("#status-message").textContent).toBe(
+      "No tasks yet. Create the first one.",
+    );
+  });
+
+  it("shows a load error when the task list request fails", async () => {
+    const { app } = mountTaskApp({
+      listTasks: vi.fn().mockRejectedValue(new Error("Unable to load tasks.")),
+    });
+
+    await app.loadTasks();
+
+    expect(document.querySelector("#status-message").textContent).toBe(
+      "Unable to load tasks.",
+    );
+    expect(document.querySelector("#task-list").children).toHaveLength(0);
+  });
+
+  it("renders missing due dates and completed-task actions", () => {
+    const { app } = mountTaskApp();
+
+    app.renderTasks([
+      {
+        id: 2,
+        title: "Review API contract",
+        owner: "Noah",
+        dueDate: null,
+        completed: true,
+      },
+    ]);
+
+    expect(document.querySelector(".task-card p").textContent).toBe(
+      "Noah · No due date",
+    );
+    expect(document.querySelector(".task-card button").textContent).toBe(
+      "Reopen",
+    );
+  });
+
   it("submits form values to the API and refreshes the list", async () => {
     const { api } = mountTaskApp({
       listTasks: vi.fn().mockResolvedValue({
