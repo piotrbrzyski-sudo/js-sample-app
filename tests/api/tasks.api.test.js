@@ -46,6 +46,28 @@ describe("Task API", () => {
     });
   });
 
+  it("persists created tasks with default field values", async () => {
+    await request(app)
+      .post("/api/tasks")
+      .send({
+        title: "Confirm Linear workflow",
+      })
+      .expect(201);
+
+    const response = await request(app).get("/api/tasks").expect(200);
+
+    expect(response.body.tasks).toEqual([
+      ...seedTasks,
+      {
+        id: 11,
+        title: "Confirm Linear workflow",
+        owner: "Unassigned",
+        dueDate: null,
+        completed: false,
+      },
+    ]);
+  });
+
   it("rejects a task without a title", async () => {
     const response = await request(app)
       .post("/api/tasks")
